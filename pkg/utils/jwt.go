@@ -82,3 +82,23 @@ func (data *JwtClaims) ValidateToken(tokenString string) (bool, error) {
 	}
 	return false, nil
 }
+
+// DecodeToken decodes the JWT token y devuelve los claims
+func (data *JwtClaims) DecodeToken(tokenString string) (*JwtClaims, error) {
+	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
+	if err != nil {
+		return nil, fmt.Errorf("error parsing token: %v", err)
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, fmt.Errorf("invalid token claims")
+	}
+
+	decodedClaims := &JwtClaims{}
+	if err := mapstructure.Decode(claims, decodedClaims); err != nil {
+		return nil, fmt.Errorf("error decoding claims: %v", err)
+	}
+
+	return decodedClaims, nil
+}
