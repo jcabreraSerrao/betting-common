@@ -9,14 +9,15 @@ import (
 
 type JwtClaims struct {
 	jwt.RegisteredClaims
-	Email       string   `json:"email"`
-	Role        string   `json:"role"`
-	RoleId      int      `json:"role_id"`
-	Name        string   `json:"name"`
-	Permissions []string `json:"permissions"`
-	UserId      int      `json:"user_id"`
-	GroupId     int      `json:"group_id"`
-	NameGroup   string   `json:"name_group"`
+	Email        string        `json:"email"`
+	Role         string        `json:"role"`
+	RoleId       int           `json:"role_id"`
+	Name         string        `json:"name"`
+	Permissions  []string      `json:"permissions"`
+	UserId       int           `json:"user_id"`
+	GroupId      int           `json:"group_id"`
+	NameGroup    string        `json:"name_group"`
+	HasuraClaims *HasuraClaims `json:"https://hasura.io/jwt/claims"`
 }
 
 type HasuraClaims struct {
@@ -63,12 +64,16 @@ func (data *JwtClaims) GenerateToken() (string, error) {
 
 func (data *JwtClaims) ValidateToken(tokenString string) (bool, error) {
 	config := GetConfig()
+	return data.ValidateTokenWithSecret(tokenString, config.JWT.SECRET)
+}
+
+func (data *JwtClaims) ValidateTokenWithSecret(tokenString string, secret string) (bool, error) {
 	token, err := jwt.Parse(
 		tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
-			return []byte(config.JWT.SECRET), nil
+			return []byte(secret), nil
 		},
 	)
 	if err != nil {
