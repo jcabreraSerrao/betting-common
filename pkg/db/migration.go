@@ -34,6 +34,8 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.SubGroup{},
 		&sql.Roles{},
 		&sql.Permissions{},
+		&sql.RolesPermissions{},
+		&sql.TypeTercio{},
 		&sql.TypeBetGroup{},
 		&sql.TypeBet{},
 		&sql.TypeTransaction{},
@@ -55,19 +57,21 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.GroupCurrency{},
 		&sql.GroupExchangeRate{},
 		&sql.Race{},
+		&sql.ParticipantsRace{},
 		&sql.SettlementRaceEstimate{},
 		&sql.SettlementRaceEstimateDetail{},
 		&sql.RacesProcessGroup{},
 		&sql.GroupRaceActivation{},
 		&sql.Tercios{},
+		&sql.UserTercio{},
 		&sql.GroupWhatsAppConfig{},
 		&sql.ConfigRemate{},
 		&sql.UserGroup{},
 		&sql.UserSubGroup{},
-		&sql.RolesPermissions{},
 		&sql.RemateEjemplares{},
 		&sql.Board{},
 		&sql.BoardRaceParada{},
+		&sql.BoardConfiRemate{},
 		&sql.RetiredHorseGroup{},
 		&sql.RetiredHorse{},
 		&sql.Bet{},
@@ -77,7 +81,20 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.BoardOfficialGroup{},
 		&sql.RetiredOfficial{},
 		&sql.RaceDividendGroup{},
-		&sql.Transactions{},
+	)
+	if err != nil {
+		log.Printf("Error migrating first batch: %v", err)
+		return err
+	}
+
+	log.Println("Migrating Transactions...")
+	if err := db.AutoMigrate(&sql.Transactions{}); err != nil {
+		log.Printf("Error migrating Transactions: %v", err)
+		return err
+	}
+
+	log.Println("Migrating dependents of Transactions...")
+	err = db.AutoMigrate(
 		&sql.TerciosRemate{},
 		&sql.Refills{},
 		&sql.Withdrawal{},
@@ -85,6 +102,9 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.ParticipantCombo{},
 		&sql.TerciosCombo{},
 		&sql.RaceGroupCommission{},
+		&sql.SaldoTerciosUserGroup{},
+		&sql.SellersGeneralReport{},
+		&sql.SellersSales{},
 	)
 
 	if err != nil {

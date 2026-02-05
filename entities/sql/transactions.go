@@ -11,28 +11,27 @@ import (
 // Transactions representa una transacción en el sistema.
 // Contiene información sobre el monto, comisión, roles, y relaciones con otras entidades.
 type Transactions struct {
-	ID                uint64           `gorm:"primaryKey;autoIncrement;column:id" json:"id"`
-	TerciosId         uint64           `gorm:"column:id_tercios" json:"terciosId"`
-	Amount            decimal.Decimal  `gorm:"column:amount;type:decimal(18,8)" json:"amount"`         // Tipo ajustado para moneda
-	Commission        decimal.Decimal  `gorm:"column:commission;type:decimal(18,8)" json:"commission"` // Tipo ajustado para moneda
-	Rever             bool             `gorm:"column:rever;type:boolean;default:false" json:"rever"`   // Tipo booleano explícito
-	Rol               string           `gorm:"column:rol;type:varchar(255)" json:"rol"`                // Tipo varchar explícito
-	TransactionsId    *uint64          `gorm:"column:id_transaction" json:"transactionsId"`
-	Transactions      *Transactions    `gorm:"foreignKey:TransactionsId;references:ID"` // Eliminada etiqueta de restricción explícita
-	BetsId            *uint64          `gorm:"column:id_bet" json:"id_bet"`
-	Bet               Bet              `gorm:"foreignKey:BetsId;references:ID"`
-	TypeTransactionId uint             `gorm:"column:id_type_transaction" json:"typeTransactionId"`
-	TypeTransaction   TypeTransaction  `gorm:"foreignKey:TypeTransactionId;references:ID" json:"typeTransaction"`
-	RaceId            *uint64          `gorm:"column:id_race" json:"id_race"`
-	Race              Race             `gorm:"foreignKey:RaceId;references:ID"`
-	DateTransaction   time.Time        `gorm:"column:date_transaction;type:timestamp with time zone;default:now();not null" json:"dateTransaction"` // Tipo timestamp explícito
-	RemateId          *uint            `gorm:"column:id_remate" json:"id_remate"`
-	Remate            ConfigRemate     `gorm:"foreignKey:RemateId;references:ID"`
-	Tercios           Tercios          `gorm:"foreignKey:TerciosId;references:ID" json:"tercio"`
-	Refills           []*Refills       `gorm:"foreignKey:TransactionId;references:ID"` // TransactionId en Refills
-	Withdrawals       []*Withdrawal    `gorm:"foreignKey:IdTransaction;references:ID"` // Corregido a IdTransaction para coincidir con Withdrawal
-	TercioRemate      []*TerciosRemate `gorm:"foreignKey:IdTransaction;references:ID"`
-	// Currency fields for multi-currency support
+	ID                 uint64             `gorm:"primaryKey;autoIncrement;column:id" json:"id"`
+	TerciosId          uint64             `gorm:"column:id_tercios" json:"terciosId"`
+	Amount             decimal.Decimal    `gorm:"column:amount;type:decimal(18,8)" json:"amount"`         // Tipo ajustado para moneda
+	Commission         decimal.Decimal    `gorm:"column:commission;type:decimal(18,8)" json:"commission"` // Tipo ajustado para moneda
+	Rever              bool               `gorm:"column:rever;type:boolean;default:false" json:"rever"`   // Tipo booleano explícito
+	Rol                string             `gorm:"column:rol;type:varchar(255)" json:"rol"`                // Tipo varchar explícito
+	TransactionsId     *uint64            `gorm:"column:id_transaction" json:"transactionsId"`
+	Transactions       *Transactions      `gorm:"foreignKey:TransactionsId;references:ID"` // Eliminada etiqueta de restricción explícita
+	BetsId             *uint64            `gorm:"column:id_bet" json:"id_bet"`
+	Bet                Bet                `gorm:"foreignKey:BetsId;references:ID"`
+	TypeTransactionId  uint               `gorm:"column:id_type_transaction" json:"typeTransactionId"`
+	TypeTransaction    TypeTransaction    `gorm:"foreignKey:TypeTransactionId;references:ID" json:"typeTransaction"`
+	RaceId             *uint64            `gorm:"column:id_race" json:"id_race"`
+	Race               Race               `gorm:"foreignKey:RaceId;references:ID"`
+	DateTransaction    time.Time          `gorm:"column:date_transaction;type:timestamp with time zone;default:now();not null" json:"dateTransaction"` // Tipo timestamp explícito
+	RemateId           *uint              `gorm:"column:id_remate" json:"id_remate"`
+	Remate             ConfigRemate       `gorm:"foreignKey:RemateId;references:ID"`
+	Tercios            Tercios            `gorm:"foreignKey:TerciosId;references:ID" json:"tercio"`
+	Refills            *Refills           `gorm:"foreignKey:TransactionId;references:ID"` // TransactionId en Refills
+	Withdrawals        *Withdrawal        `gorm:"foreignKey:IdTransaction;references:ID"` // Corregido a IdTransaction para coincidir con Withdrawal
+	TercioRemate       *TerciosRemate     `gorm:"foreignKey:IdTransaction;references:ID"`
 	CurrencyID         *uint              `gorm:"column:currency_id" json:"currency_id"`                                                                           // Foreign key to Currency
 	Currency           *Currency          `gorm:"foreignKey:CurrencyID;references:ID" json:"currency"`                                                             // Associated currency
 	ExchangeRate       *float64           `gorm:"column:exchange_rate;type:decimal(15,6)" json:"exchange_rate"`                                                    // Exchange rate applied at transaction time

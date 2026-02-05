@@ -1,0 +1,3 @@
+-- Índices para optimizar consultas
+CREATE INDEX idx_bet_participants_id_bet ON gaming.bet_participants(id_bet);
+CREATE INDEX idx_bet_participants_id_participant ON gaming.bet_participants(id_participant);
