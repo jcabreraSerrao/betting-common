@@ -95,3 +95,24 @@ func ExtractDigits(text string) string {
 	reg := regexp.MustCompile(`[^0-9]+`)
 	return reg.ReplaceAllString(text, "")
 }
+
+// MaskURL oculta las credenciales en una cadena de conexión para logging
+func MaskURL(url string) string {
+	if url == "" {
+		return ""
+	}
+	// Buscar la posición de @
+	atIndex := strings.Index(url, "@")
+	if atIndex == -1 {
+		return url // No hay credenciales o formato desconocido
+	}
+
+	// Buscar el inicio de las credenciales después de ://
+	prefixIndex := strings.Index(url, "://")
+	if prefixIndex == -1 {
+		return "***@" + url[atIndex+1:]
+	}
+	prefixIndex += 3 // Saltar ://
+
+	return url[:prefixIndex] + "***" + url[atIndex:]
+}
