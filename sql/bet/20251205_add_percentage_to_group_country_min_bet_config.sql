@@ -10,3 +10,7 @@ COMMIT;
 
 -- Rollback:
 -- ALTER TABLE config.group_country_min_bet_config DROP COLUMN percentage;
+
+
+ALTER TABLE gaming.race_group_bet_info 
+ADD CONSTRAINT idx_race_group_unique UNIQUE (id_race, id_group);
