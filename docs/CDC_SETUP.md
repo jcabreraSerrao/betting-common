@@ -45,6 +45,7 @@ CREATE PUBLICATION betting_cdc_pub FOR TABLE
 
 ```sql
 ALTER TABLE gaming.group_race_activations REPLICA IDENTITY FULL;
+ALTER TABLE gaming.bet REPLICA IDENTITY FULL;
 ```
 
 ### 2.2 Crear Slot de Replicación
