@@ -13,6 +13,7 @@ type JwtClaims struct {
 	Role         string        `json:"role"`
 	RoleId       int           `json:"role_id"`
 	Name         string        `json:"name"`
+	Picture      string        `json:"picture"`
 	Permissions  []string      `json:"permissions"`
 	UserId       int           `json:"user_id"`
 	GroupId      int           `json:"group_id"`
@@ -48,6 +49,7 @@ func (data *JwtClaims) GenerateToken() (string, error) {
 			"role":                         data.Role,
 			"role_id":                      data.RoleId,
 			"name":                         data.Name,
+			"picture":                      data.Picture,
 			"permissions":                  data.Permissions,
 			"groupId":                      data.GroupId,
 			"nameGroup":                    data.NameGroup,
