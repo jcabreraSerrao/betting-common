@@ -154,6 +154,20 @@ WHERE NOT EXISTS (
 );
 
 -- =============================================================================
+-- PERMISOS PARA GESTIÓN DE POLLAS
+-- =============================================================================
+INSERT INTO security.permissions ("key", alias, "group", created_at, updated_at)
+SELECT v.key, v.alias, v.group_name, v.created_at, v.updated_at
+FROM (VALUES
+  ('polla.list', 'Listar Pollas', 'polla', now(), now()),
+  ('polla.manage', 'Gestionar Pollas', 'polla', now(), now()),
+  ('polla.settle', 'Liquidar Pollas', 'polla', now(), now())
+) AS v(key, alias, group_name, created_at, updated_at)
+WHERE NOT EXISTS (
+  SELECT 1 FROM security.permissions p WHERE p."key" = v.key
+);
+
+-- =============================================================================
 -- VERIFICACIÓN Y DOCUMENTACIÓN
 -- =============================================================================
 

@@ -28,6 +28,7 @@ type Race struct {
 	RetiredOfficial      []RetiredOfficial     `gorm:"foreignKey:RaceID;references:ID" json:"retiredOfficial"`
 	HippodromeId         uint                  `gorm:"column:hippodrome_group" json:"hippodromeId"`
 	Hippodrome           Hippodromes           `gorm:"foreignKey:HippodromeId;references:ID" json:"hippodrome"`
+	IsCancelled          bool                  `gorm:"column:is_cancelled;default:false" json:"isCancelled"`
 	CreatedAt            time.Time
 	UpdatedAt            time.Time
 	DeletedAt            gorm.DeletedAt `gorm:"index" json:"-"`
