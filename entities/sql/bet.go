@@ -41,6 +41,7 @@ type Bet struct {
 	CreatedAt       time.Time         `gorm:"index:idx_created_at_desc,priority:1;index:idx_created_at_desc,sort:desc" json:"createdAt"`
 	TextAutomatic   string            `gorm:"column:text_automatic;type:text" json:"text_automatic"`
 	MongoID         string            `gorm:"column:mongo_id;type:varchar(255)" json:"mongo_id"`
+	Recibo          *bool             `gorm:"column:recibo;default:null" json:"recibo"`
 	UpdatedAt       time.Time
 	DeletedAt       gorm.DeletedAt `gorm:"index" json:"-"`
 }
