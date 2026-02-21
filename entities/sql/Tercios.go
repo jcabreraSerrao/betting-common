@@ -21,6 +21,7 @@ type Tercios struct {
 	TypeTercio   TypeTercio      `gorm:"foreignKey:TypeTercioID;references:ID"`
 	UserTercioID *uint           `gorm:"column:id_user_tercio" json:"id_user_tercio"`
 	UserTercio   *UserTercio     `gorm:"foreignKey:UserTercioID;references:ID"`
+	Reverso      *TercioReverso  `gorm:"foreignKey:TercioID;references:ID" json:"reverso,omitempty"`
 	Transactions []Transactions  `gorm:"foreignKey:TerciosId;"`
 	Bet          []Bet           `gorm:"foreignKey:TercioId;"`
 	Bet2         []Bet           `gorm:"foreignKey:TercioId2;"`

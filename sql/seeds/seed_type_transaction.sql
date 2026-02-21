@@ -20,7 +20,13 @@ INSERT INTO transactions.type_transaction (id, name, type_calc, classification, 
 (16, 'transaction-delete-rest', 'rest', NULL, NULL, 'transaction-delete-rest', NULL, NULL, NULL),
 (17, 'transaction-delete-sum', 'sum', NULL, NULL, 'transaction-delete-sum', NULL, NULL, NULL),
 (18, 'transfer-banca-sum', 'sum', NULL, NULL, 'transfer-banca-sum', NULL, NULL, NULL),
-(19, 'transfer-banca-rest', 'rest', NULL, NULL, 'transfer-banca-rest', NULL, NULL, NULL)
+(19, 'transfer-banca-rest', 'rest', NULL, NULL, 'transfer-banca-rest', NULL, NULL, NULL),
+(20, 'reverso-self-sum', 'sum', NULL, NULL, 'reverso-self-sum', NULL, NULL, NULL),
+(21, 'reverso-self-rest', 'rest', NULL, NULL, 'reverso-self-rest', NULL, NULL, NULL),
+(22, 'reverso-interno-sum', 'sum', NULL, NULL, 'reverso-interno-sum', NULL, NULL, NULL),
+(23, 'reverso-interno-rest', 'rest', NULL, NULL, 'reverso-interno-rest', NULL, NULL, NULL),
+(24, 'reverso-externo-rest', 'rest', NULL, NULL, 'reverso-externo-rest', NULL, NULL, NULL),
+(25, 'reverso-log', '', NULL, NULL, 'reverso-log', NULL, NULL, NULL)
 ON CONFLICT (id) DO NOTHING;
 
 

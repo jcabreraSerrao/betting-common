@@ -23,6 +23,12 @@ var TypeTransactionIdConst = map[string]int{
 	"transaction-delete-sum":  17,
 	"transfer-banca-sum":      18,
 	"transfer-banca-rest":     19,
+	"reverso-self-sum":        20,
+	"reverso-self-rest":       21,
+	"reverso-interno-sum":     22,
+	"reverso-interno-rest":    23,
+	"reverso-externo-rest":    24,
+	"reverso-log":             25,
 }
 
 const (
