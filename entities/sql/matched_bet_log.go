@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"bytes"
 	"encoding/json"
 	"time"
 
@@ -90,11 +91,21 @@ func (j *MatchInfos) Scan(value interface{}) error {
 		*j = nil
 		return nil
 	}
-	bytes, ok := value.([]byte)
+	b, ok := value.([]byte)
 	if !ok {
 		return nil
 	}
-	return json.Unmarshal(bytes, j)
+	// Tolerancia a ambos formatos: arreglo [] u objeto {} (datos legacy)
+	trimmed := bytes.TrimSpace(b)
+	if len(trimmed) > 0 && trimmed[0] == '{' {
+		var single MatchInfo
+		if err := json.Unmarshal(b, &single); err != nil {
+			return err
+		}
+		*j = MatchInfos{single}
+		return nil
+	}
+	return json.Unmarshal(b, j)
 }
 
 func (j MatchInfos) Value() (interface{}, error) {
