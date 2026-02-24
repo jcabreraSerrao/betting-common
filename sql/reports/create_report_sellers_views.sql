@@ -4,6 +4,7 @@
 -- La currency se obtiene desde race -> hippodrome -> country -> currency
 -- El amount/sales se maneja en una vista separada (sellers_sales)
 
+DROP VIEW IF EXISTS reports.sellers_general_report CASCADE;
 CREATE OR REPLACE VIEW reports.sellers_general_report AS
 SELECT
     b.id_group,
@@ -31,6 +32,7 @@ GROUP BY b.id_group, DATE(r.open_date AT TIME ZONE 'America/Caracas'), curr.id, 
 
 -- Vista separada para ventas (sales/amount)
 -- Filtra por tipo de transacción 'bet-winner-create', no revertidas
+DROP VIEW IF EXISTS reports.sellers_sales CASCADE;
 CREATE OR REPLACE VIEW reports.sellers_sales AS
 SELECT
     b.id_group,

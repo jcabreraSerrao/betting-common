@@ -12,5 +12,11 @@ COMMIT;
 -- ALTER TABLE config.group_country_min_bet_config DROP COLUMN percentage;
 
 
-ALTER TABLE gaming.race_group_bet_info 
-ADD CONSTRAINT idx_race_group_unique UNIQUE (id_race, id_group);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'idx_race_group_unique'
+    ) THEN
+        ALTER TABLE gaming.race_group_bet_info ADD CONSTRAINT idx_race_group_unique UNIQUE (id_race, id_group);
+    END IF;
+END $$;

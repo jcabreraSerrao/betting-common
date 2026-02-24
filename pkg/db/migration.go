@@ -11,7 +11,7 @@ import (
 // RunMigrations executes AutoMigrate for all registered entities and creates necessary schemas
 func RunMigrations(db *gorm.DB) error {
 	// Create common schemas
-	schemas := []string{"gaming", "security", "config", "transactions", "payments", "reports"}
+	schemas := []string{"gaming", "security", "config", "transactions", "payments", "reports", "evolution"}
 	for _, schema := range schemas {
 		if err := db.Exec("CREATE SCHEMA IF NOT EXISTS " + schema).Error; err != nil {
 			log.Printf("Error creating schema %s: %v", schema, err)
@@ -65,6 +65,8 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.Tercios{},
 		&sql.TercioReverso{},
 		&sql.UserTercio{},
+		&sql.WorkingDay{},
+		&sql.WorkingDaySnapshot{},
 		&sql.GroupWhatsAppConfig{},
 		&sql.ConfigRemate{},
 		&sql.UserGroup{},
@@ -82,6 +84,9 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.BoardOfficialGroup{},
 		&sql.RetiredOfficial{},
 		&sql.RaceDividendGroup{},
+		&sql.MatchedBetLog{},
+		&sql.TestMatchResult{},
+		&sql.WhatsappMessageLog{},
 	)
 	if err != nil {
 		log.Printf("Error migrating first batch: %v", err)
@@ -103,9 +108,6 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.ParticipantCombo{},
 		&sql.TerciosCombo{},
 		&sql.RaceGroupCommission{},
-		&sql.SaldoTerciosUserGroup{},
-		&sql.SellersGeneralReport{},
-		&sql.SellersSales{},
 	)
 
 	if err != nil {
@@ -116,7 +118,7 @@ func RunMigrations(db *gorm.DB) error {
 	log.Println("Migrations executed successfully")
 
 	// Automatically run seeds from organized directories
-	seedDirs := []string{"seeds", "security", "bet", "race", "tercios", "transaction"}
+	seedDirs := []string{"seeds", "security", "bet", "race", "tercios", "transaction", "functions", "reports"}
 	for _, dir := range seedDirs {
 		path := "sql/" + dir
 		files, err := os.ReadDir(path)

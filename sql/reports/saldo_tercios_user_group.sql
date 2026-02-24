@@ -1,4 +1,5 @@
 -- Vista: reports.saldo_tercios_user_group
+DROP VIEW IF EXISTS reports.saldo_tercios_user_group CASCADE;
 CREATE OR REPLACE VIEW reports.saldo_tercios_user_group AS
 SELECT COALESCE(sum(
     CASE
