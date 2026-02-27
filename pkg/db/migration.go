@@ -87,6 +87,9 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.MatchedBetLog{},
 		&sql.TestMatchResult{},
 		&sql.WhatsappMessageLog{},
+		&sql.Polla{},
+		&sql.PollaRace{},
+		&sql.PollaInvalidHorse{},
 	)
 	if err != nil {
 		log.Printf("Error migrating first batch: %v", err)
@@ -108,6 +111,8 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.ParticipantCombo{},
 		&sql.TerciosCombo{},
 		&sql.RaceGroupCommission{},
+		&sql.PollaParticipant{},
+		&sql.PollaSelection{},
 	)
 
 	if err != nil {
