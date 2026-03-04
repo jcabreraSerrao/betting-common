@@ -42,6 +42,8 @@ type Bet struct {
 	TextAutomatic   string            `gorm:"column:text_automatic;type:text" json:"text_automatic"`
 	MongoID         string            `gorm:"column:mongo_id;type:varchar(255)" json:"mongo_id"`
 	Recibo          *bool             `gorm:"column:recibo;default:null" json:"recibo"`
+	LlavePrincipal  *bool             `gorm:"column:llave_principal;default:null" json:"llave_principal,omitempty"`
+	LlaveSecundario *bool             `gorm:"column:llave_secundario;default:null" json:"llave_secundario,omitempty"`
 	UpdatedAt       time.Time
 	DeletedAt       gorm.DeletedAt `gorm:"index" json:"-"`
 }

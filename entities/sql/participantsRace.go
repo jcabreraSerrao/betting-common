@@ -10,7 +10,8 @@ type ParticipantsRace struct {
 	ID            uint           `gorm:"primarykey" json:"id"`
 	RaceID        uint           `gorm:"column:race_id" json:"idRace"`
 	Race          Race           `gorm:"foreignKey:RaceID;references:ID" json:"race"`
-	Position      int            `gorm:"column:position" json:"position"`
+	Position      string         `gorm:"column:position" json:"position"`
+	PositionGroup string         `gorm:"column:position_group;index" json:"positionGroup"`
 	Horse         string         `gorm:"column:horse" json:"horse"`
 	Jockey        string         `gorm:"column:jockey" json:"jockey"`
 	Trainer       string         `gorm:"column:trainer" json:"trainer"`
