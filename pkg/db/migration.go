@@ -63,6 +63,7 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.RacesProcessGroup{},
 		&sql.GroupRaceActivation{},
 		&sql.Tercios{},
+		&sql.TercioContact{},
 		&sql.TercioReverso{},
 		&sql.UserTercio{},
 		&sql.WorkingDay{},

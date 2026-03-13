@@ -9,7 +9,6 @@ import (
 
 type UserTercio struct {
 	ID        uint      `gorm:"primaryKey;autoIncrement" json:"id"`
-	Phone     string    `gorm:"column:phone" json:"phone"`
 	Email     string    `gorm:"column:email" json:"email"`
 	Name      string    `gorm:"column:name" json:"name"`
 	Status    bool      `gorm:"column:status" json:"status"`

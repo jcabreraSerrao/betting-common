@@ -19,16 +19,16 @@ type Tercios struct {
 	Group        Group           `gorm:"foreignKey:GroupId;references:ID"`
 	TypeTercioID uint            `gorm:"column:id_type_tercio" json:"id_type_tercio"`
 	TypeTercio   TypeTercio      `gorm:"foreignKey:TypeTercioID;references:ID"`
-	UserTercioID *uint           `gorm:"column:id_user_tercio" json:"id_user_tercio"`
+	UserTercioID *uint           `gorm:"column:id_user_tercio;default:null" json:"id_user_tercio"`
 	UserTercio   *UserTercio     `gorm:"foreignKey:UserTercioID;references:ID"`
+	Contacts     []TercioContact `gorm:"foreignKey:TercioID;references:ID" json:"contacts"`
 	Reverso      *TercioReverso  `gorm:"foreignKey:TercioID;references:ID" json:"reverso,omitempty"`
 	Transactions []Transactions  `gorm:"foreignKey:TerciosId;"`
 	Bet          []Bet           `gorm:"foreignKey:TercioId;"`
 	Bet2         []Bet           `gorm:"foreignKey:TercioId2;"`
-	TelegramID   string          `gorm:"column:id_telegram" json:"id_telegram"`
 	Token        string          `gorm:"column:token" json:"token"`
 	Casa         bool            `gorm:"column:casa;default:false" json:"casa"`
-	PhoneNumber  string          `gorm:"column:phone_number" json:"phone_number"`
+	Code         string          `gorm:"column:code" json:"code"`
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	DeletedAt    gorm.DeletedAt `gorm:"index" json:"-"`

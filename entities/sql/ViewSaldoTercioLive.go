@@ -27,14 +27,14 @@ type ViewSaldoTercioLive struct {
 	UltimoSnapshotAt       *time.Time      `gorm:"column:ultimo_snapshot_at"       json:"ultimo_snapshot_at"`
 
 	// Campos de tercio (mismos que ViewSaldoTercio para compatibilidad)
-	IDTercio    uint64 `gorm:"column:id_tercio"    json:"idTercio"`
-	Name        string `gorm:"column:name"         json:"name"`
-	GroupID     uint   `gorm:"column:id_group"     json:"idGroup"`
-	Status      bool   `gorm:"column:status"       json:"status"`
-	Token       string `gorm:"column:token"        json:"token"`
-	PhoneNumber string `gorm:"column:phone_number" json:"phone_number"`
-	IDTelegram  string `gorm:"column:id_telegram"  json:"id_telegram"`
-	IDUser      int    `gorm:"column:id_user"      json:"idUser"`
+	IDTercio     uint64          `gorm:"column:id_tercio"    json:"idTercio"`
+	Name         string          `gorm:"column:name"         json:"name"`
+	GroupID      uint            `gorm:"column:id_group"     json:"idGroup"`
+	Status       bool            `gorm:"column:status"       json:"status"`
+	Token        string          `gorm:"column:token"        json:"token"`
+	PhoneNumber  JSONStringArray `gorm:"column:phone_numbers" json:"phone_numbers"`
+	WhatsappCode JSONStringArray `gorm:"column:whatsapp_code"  json:"whatsapp_code"`
+	IDUser       int             `gorm:"column:id_user"      json:"idUser"`
 }
 
 func (ViewSaldoTercioLive) TableName() string {

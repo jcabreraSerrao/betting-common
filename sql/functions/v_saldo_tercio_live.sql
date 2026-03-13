@@ -75,12 +75,22 @@ SELECT
     t.id_group,
     t.status,
     COALESCE(t.token, '')                                                       AS token,
-    COALESCE(t.phone_number, '')                                                AS phone_number,
-    COALESCE(t.id_telegram, '')                                                 AS id_telegram,
+    COALESCE(tc_phone.contact_values, '[]'::json)                               AS phone_numbers,
+    COALESCE(tc_telegram.contact_values, '[]'::json)                            AS whatsapp_code,
     COALESCE(ut.id, 0)                                                          AS id_user
 FROM gaming.tercios t
 LEFT JOIN jornada_activa ja   ON ja.id_group   = t.id_group
 LEFT JOIN  ultimo_snapshot us  ON us.id_tercio  = t.id AND us.id_group = t.id_group
 LEFT JOIN  delta_desde_cierre dc ON dc.id_tercio = t.id AND dc.id_group = t.id_group
 LEFT JOIN  security.user_tercio ut ON t.id_user_tercio = ut.id
+LEFT JOIN LATERAL (
+    SELECT JSON_AGG(contact_value ORDER BY is_primary DESC, created_at ASC) AS contact_values 
+    FROM gaming.tercio_contacts 
+    WHERE id_tercio = t.id AND contact_type = 'PHONE' AND deleted_at IS NULL
+) tc_phone ON TRUE
+LEFT JOIN LATERAL (
+    SELECT JSON_AGG(contact_value ORDER BY is_primary DESC, created_at ASC) AS contact_values 
+    FROM gaming.tercio_contacts 
+    WHERE id_tercio = t.id AND contact_type = 'WHATSAPP' AND deleted_at IS NULL
+) tc_telegram ON TRUE
 WHERE t.deleted_at IS NULL;
