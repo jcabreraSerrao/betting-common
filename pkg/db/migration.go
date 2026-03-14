@@ -30,6 +30,7 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.RequestLog{},
 		&sql.User{},
 		&sql.Group{},
+		&sql.GroupExcludedParticipant{},
 		&sql.BancaGroupLink{},
 		&sql.SubGroup{},
 		&sql.Roles{},
