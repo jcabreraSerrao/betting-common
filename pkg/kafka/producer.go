@@ -45,6 +45,19 @@ func (p *KafkaProducer) PublishMessage(ctx context.Context, key string, payload 
 	return p.writer.WriteMessages(ctx, msg)
 }
 
+// PublishMessageToTopic publica un mensaje a un topic específico dinámicamente 
+// reutilizando el mismo writer sin especificar Topic por defecto en config.
+func (p *KafkaProducer) PublishMessageToTopic(ctx context.Context, topic string, key string, payload []byte) error {
+	msg := kafka.Message{
+		Topic: topic,
+		Value: payload,
+	}
+	if key != "" {
+		msg.Key = []byte(key)
+	}
+	return p.writer.WriteMessages(ctx, msg)
+}
+
 // Close finaliza la conexión del productor
 func (p *KafkaProducer) Close() error {
 	if p.writer != nil {
