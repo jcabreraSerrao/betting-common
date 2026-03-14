@@ -11,12 +11,18 @@ import (
 // RunMigrations executes AutoMigrate for all registered entities and creates necessary schemas
 func RunMigrations(db *gorm.DB) error {
 	// Create common schemas
-	schemas := []string{"gaming", "security", "config", "transactions", "payments", "reports", "evolution"}
+	schemas := []string{"gaming", "security", "config", "transactions", "payments", "reports", "evolution", "whatsapp"}
 	for _, schema := range schemas {
 		if err := db.Exec("CREATE SCHEMA IF NOT EXISTS " + schema).Error; err != nil {
 			log.Printf("Error creating schema %s: %v", schema, err)
 			return err
 		}
+	}
+
+	// Enable extension for UUIDs
+	if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`).Error; err != nil {
+		log.Printf("Error creating uuid-ossp extension: %v", err)
+		return err
 	}
 
 	// Order is important for FKs
@@ -89,6 +95,7 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.MatchedBetLog{},
 		&sql.TestMatchResult{},
 		&sql.WhatsappMessageLog{},
+		&sql.WhatsappMatchAttempt{},
 		&sql.Polla{},
 		&sql.PollaRace{},
 		&sql.PollaInvalidHorse{},
