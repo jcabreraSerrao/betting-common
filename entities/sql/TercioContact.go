@@ -11,6 +11,7 @@ type ContactType string
 const (
 	ContactTypePhone    ContactType = "PHONE"
 	ContactTypeWhatsApp ContactType = "WHATSAPP"
+	ContactTypeTelegram ContactType = "TELEGRAM"
 )
 
 type TercioContact struct {

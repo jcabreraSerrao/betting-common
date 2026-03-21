@@ -9,10 +9,19 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	MatchedBetStatusPending    = "pending"
+	MatchedBetStatusOpen       = "open"
+	MatchedBetStatusProcessing = "processing"
+	MatchedBetStatusCompleted  = "completed"
+	MatchedBetStatusClosed     = "closed"
+)
+
 // MatchedBetLog almacena el registro principal de una apuesta procesada (Original)
 type MatchedBetLog struct {
 	OriginalMessageID string          `gorm:"primaryKey;column:original_message_id;type:varchar(255)" json:"original_message_id"` // Equivale también a MongoID en la tabla Bet
 	Tercio1ID         uint            `gorm:"column:tercio_1_id;index" json:"tercio_1_id"`
+	Tercio1JID        string          `gorm:"column:tercio_1_jid;type:varchar(255);index" json:"tercio_1_jid"`
 	Tercio1Name       string          `gorm:"column:tercio_1_name;type:varchar(255)" json:"tercio_1_name"`
 	RaceID            uint64          `gorm:"column:race_id;index:idx_matched_race_group_status;index:idx_matched_race" json:"race_id"`
 	Race              Race            `gorm:"foreignKey:RaceID" json:"race"`

@@ -99,6 +99,7 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.Polla{},
 		&sql.PollaRace{},
 		&sql.PollaInvalidHorse{},
+		&sql.CommandRule{},
 	)
 	if err != nil {
 		log.Printf("Error migrating first batch: %v", err)
