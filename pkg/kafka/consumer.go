@@ -10,7 +10,8 @@ import (
 type ConsumerConfig struct {
 	Brokers []string
 	GroupID string
-	Topic   string
+	Topic   string   // Tópico simple (compatibilidad)
+	Topics  []string // Lista de tópicos (nuevo)
 }
 
 // KafkaConsumer es un wrapper estructurado para segmentio/kafka-go
@@ -20,10 +21,15 @@ type KafkaConsumer struct {
 
 // NewKafkaConsumer inicializa un nuevo consumidor
 func NewKafkaConsumer(cfg ConsumerConfig) *KafkaConsumer {
+	topics := cfg.Topics
+	if len(topics) == 0 && cfg.Topic != "" {
+		topics = []string{cfg.Topic}
+	}
+
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:  cfg.Brokers,
 		GroupID:  cfg.GroupID,
-		Topic:    cfg.Topic,
+		GroupTopics: topics,
 		MinBytes: 10e3, // 10KB
 		MaxBytes: 10e6, // 10MB
 	})

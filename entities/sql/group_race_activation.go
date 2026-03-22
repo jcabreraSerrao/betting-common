@@ -18,6 +18,7 @@ type GroupRaceActivation struct {
 	CreatedAt      time.Time      `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt      time.Time      `gorm:"column:updated_at" json:"updated_at"`
 	LastNotifiedAt *time.Time     `gorm:"column:last_notified_at" json:"last_notified_at"`
+	DeactivatedAt  *time.Time     `gorm:"column:deactivated_at" json:"deactivated_at"`
 	DeletedAt      gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
