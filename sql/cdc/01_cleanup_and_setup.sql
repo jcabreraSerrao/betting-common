@@ -20,7 +20,8 @@ CREATE PUBLICATION betting_cdc_pub FOR TABLE
     gaming.board_race_group, 
     gaming.retired_horse_group, 
     gaming.race, 
-    gaming.group_race_activations;
+    gaming.group_race_activations,
+    whatsapp.match_attempts;
 
 -- 4. Create the single replication slot
 -- We use logical_decoding with pgoutput plugin

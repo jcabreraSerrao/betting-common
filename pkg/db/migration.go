@@ -130,6 +130,11 @@ func RunMigrations(db *gorm.DB) error {
 		return err
 	}
 
+	// Ensure unique constraint for match_attempts upsert
+	if err := db.Exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_wa_attempt_quoted_id ON whatsapp.match_attempts (quoted_message_id)").Error; err != nil {
+		log.Printf("Error creating unique index on match_attempts: %v", err)
+	}
+
 	log.Println("Migrations executed successfully")
 
 	// Automatically run seeds from organized directories
