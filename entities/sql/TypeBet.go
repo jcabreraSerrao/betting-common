@@ -10,6 +10,7 @@ type TypeBet struct {
 	Name           string         `gorm:"column:name" json:"name"`
 	TypeCalc       string         `gorm:"column:type_calc" json:"type_calc"`
 	Classification string         `gorm:"column:classification" json:"classification"`
+	Sort           int            `gorm:"column:sort;default:0" json:"sort"`
 	TypeBetGroup   []TypeBetGroup `gorm:"foreignKey:TypeBetId;references:ID" json:"typeBetGroup"`
 
 	gorm.Model

@@ -34,6 +34,7 @@ type MatchAttemptResponse struct {
 	ErrorType       ErrorWarningType `json:"error_type,omitempty"`
 	ErrorMessage    string           `json:"error_message,omitempty"`
 	ResponseMessage string           `json:"response_message,omitempty"` // Lo que respondió el bot
+	AIResponse      interface{}      `json:"ai_response,omitempty"`      // Payload de la IA
 	Timestamp       time.Time        `json:"timestamp"`
 }
 
