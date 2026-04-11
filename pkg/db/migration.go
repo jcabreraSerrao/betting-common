@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -10,6 +11,9 @@ import (
 
 // RunMigrations executes AutoMigrate for all registered entities and creates necessary schemas
 func RunMigrations(db *gorm.DB) error {
+	// Ensure PostgreSQL is configured for logical replication (CDC)
+	ensureLogicalReplication(db)
+
 	// Create common schemas
 	schemas := []string{"gaming", "security", "config", "transactions", "payments", "reports", "evolution", "whatsapp"}
 	for _, schema := range schemas {
@@ -23,6 +27,24 @@ func RunMigrations(db *gorm.DB) error {
 	if err := db.Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`).Error; err != nil {
 		log.Printf("Error creating uuid-ossp extension: %v", err)
 		return err
+	}
+
+	// Pre-create tables involved in circular dependencies to avoid "relation does not exist" errors
+	preCreateTables := []struct {
+		table  string
+		schema string
+	}{
+		{"transactions", "transactions"},
+		{"config_remate", "gaming"},
+		{"bet", "gaming"},
+	}
+
+	for _, tc := range preCreateTables {
+		query := "CREATE TABLE IF NOT EXISTS " + tc.schema + "." + tc.table + " (id bigserial PRIMARY KEY)"
+		if err := db.Exec(query).Error; err != nil {
+			log.Printf("Error pre-creating table %s.%s: %v", tc.schema, tc.table, err)
+			return err
+		}
 	}
 
 	// Order is important for FKs
@@ -100,20 +122,7 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.PollaRace{},
 		&sql.PollaInvalidHorse{},
 		&sql.CommandRule{},
-	)
-	if err != nil {
-		log.Printf("Error migrating first batch: %v", err)
-		return err
-	}
-
-	log.Println("Migrating Transactions...")
-	if err := db.AutoMigrate(&sql.Transactions{}); err != nil {
-		log.Printf("Error migrating Transactions: %v", err)
-		return err
-	}
-
-	log.Println("Migrating dependents of Transactions...")
-	err = db.AutoMigrate(
+		&sql.Transactions{},
 		&sql.TerciosRemate{},
 		&sql.Refills{},
 		&sql.Withdrawal{},
@@ -124,6 +133,10 @@ func RunMigrations(db *gorm.DB) error {
 		&sql.PollaParticipant{},
 		&sql.PollaSelection{},
 	)
+	if err != nil {
+		log.Printf("Error migrating first batch: %v", err)
+		return err
+	}
 
 	if err != nil {
 		log.Printf("Error running migrations: %v", err)
@@ -175,4 +188,34 @@ func RunSeed(db *gorm.DB, path string) error {
 
 	log.Printf("Seed executed: %s", path)
 	return nil
+}
+
+// ensureLogicalReplication attempts to configure PostgreSQL for logical decoding (CDC).
+// This requires superuser privileges and a server restart to take effect if changes are made.
+func ensureLogicalReplication(db *gorm.DB) {
+	commands := []struct {
+		key   string
+		value string
+	}{
+		{"wal_level", "logical"},
+		{"max_replication_slots", "10"},
+		{"max_wal_senders", "10"},
+	}
+
+	for _, cmd := range commands {
+		// Check current value
+		var currentValue string
+		err := db.Raw(fmt.Sprintf("SHOW %s", cmd.key)).Scan(&currentValue).Error
+		if err == nil && currentValue == cmd.value {
+			continue // Already configured correctly
+		}
+
+		// Attempt to update
+		query := fmt.Sprintf("ALTER SYSTEM SET %s = '%s'", cmd.key, cmd.value)
+		if err := db.Exec(query).Error; err != nil {
+			log.Printf("Warning: Could not set %s to %s automatically: %v. This may require manual configuration for CDC.", cmd.key, cmd.value, err)
+		} else {
+			log.Printf("PostgreSQL configuration updated: %s = %s. A RESTART of the database is required to apply changes.", cmd.key, cmd.value)
+		}
+	}
 }

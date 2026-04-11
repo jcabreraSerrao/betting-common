@@ -21,7 +21,8 @@ type WhatsAppSession struct {
 	Status          string         `gorm:"column:status;type:varchar(20);default:'pending'" json:"status"` // pending, connected, disconnected
 	RegistrationID  *uint32        `gorm:"column:registration_id" json:"registration_id,omitempty"`        // ID de registro en whatsmeow
 	LastConnectedAt *time.Time     `gorm:"column:last_connected_at" json:"last_connected_at,omitempty"`
-	QRExpiresAt     *time.Time     `gorm:"column:qr_expires_at" json:"qr_expires_at,omitempty"`
+	QRExpiresAt      *time.Time     `gorm:"column:qr_expires_at" json:"qr_expires_at,omitempty"`
+	ProxySessionCode string         `gorm:"column:proxy_session_code;type:varchar(50)" json:"proxy_session_code,omitempty"` // Código session-XXXX del proxy
 }
 
 func (WhatsAppSession) TableName() string {
